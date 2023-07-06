@@ -1,12 +1,13 @@
 <template>
   <div class="home">
+    <div class="timer">{{ formatTime }}</div>
     <Card :infoCards="cards" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Card from "@/components/Card.vue"; // @ is an alias to /src
+import Card from "@/components/Card.vue";
 
 interface InfoCard {
   id: number;
@@ -16,12 +17,17 @@ interface InfoCard {
   name: string;
 }
 
+interface HomeData {
+  cards: InfoCard[];
+  timeGame: number;
+}
+
 export default defineComponent({
   name: "Home",
   components: {
     Card,
   },
-  data() {
+  data(): HomeData {
     return {
       cards: [
         {
@@ -96,10 +102,16 @@ export default defineComponent({
           name: "Vasco",
         },
       ] as InfoCard[],
-      total: 0,
-      quantidadeTotal: 0,
-      submiteForm: false,
+      timeGame: 0,
     };
+  },
+  computed: {
+    formatTime() {
+      let scd: any = this.timeGame;
+      const minutes = Math.floor(this.timeGame / 60);
+      const seconds = scd % 60;
+      return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    },
   },
   created() {
     // Duplica os cards
@@ -115,6 +127,9 @@ export default defineComponent({
     // Embaralha os cards aleatoriamente
     this.cards = this.shuffleArray(duplicatedCards);
   },
+  mounted() {
+    this.startTimer();
+  },
   methods: {
     shuffleArray(array: any) {
       // Implementação do algoritmo de Fisher-Yates para embaralhar o array
@@ -124,6 +139,19 @@ export default defineComponent({
       }
       return array;
     },
+    startTimer() {
+      this.timeGame = 0;
+      setInterval(() => {
+        this.timeGame++;
+      }, 1000);
+    },
   },
 });
 </script>
+
+<style scoped>
+.timer {
+  font-size: 24px;
+  font-weight: bold;
+}
+</style>
