@@ -3,11 +3,7 @@
     <template v-for="info in localInfoCards" :key="info.id">
       <transition name="card-transition" mode="out-in">
         <template v-if="info.flipped">
-          <li
-            class="card"
-            @click="flipCard(info)"
-            :class="['card-content', { flipped: info.flipped }]"
-          >
+          <li class="card" :class="['card-content', { flipped: info.flipped }]">
             <img :src="info.img" :alt="info.name" class="card-image" />
             <div class="card-content">
               <h3 class="card-title">{{ info.name }}</h3>
@@ -50,31 +46,32 @@ export default defineComponent({
   },
   methods: {
     flipCard(card: InfoCard) {
-      if (
-        this.flippedCards.length < 2 &&
-        !this.flippedCards.includes(card.idMatching)
-      ) {
+      if (this.flippedCards.length < 2) {
         card.flipped = true;
         this.flippedCards.push(card.idMatching);
 
         if (this.flippedCards.length === 2) {
           const [card1, card2] = this.flippedCards;
-          console.log("if tam 2", this.flippedCards);
-          console.log("card1", card1);
-          console.log("card2", card2);
 
           if (
             this.localInfoCards[card1 - 1].idMatching ===
             this.localInfoCards[card2 - 1].idMatching
           ) {
             // Lógica para quando os dois cartões são iguais
-            console.log("Cartões iguais!");
-          } else {
-            // Lógica para quando os dois cartões são diferentes
-            console.log("Cartões não iguais iguais!");
             setTimeout(() => {
               this.localInfoCards = this.localInfoCards.map((info) => {
-                if (info.id === card1 || info.id === card2) {
+                if (info.idMatching === card1 || info.idMatching === card2) {
+                  return { ...info, flipped: true };
+                }
+                return info;
+              });
+              this.flippedCards = [];
+            }, 1000);
+          } else {
+            // Lógica para quando os dois cartões são diferentes
+            setTimeout(() => {
+              this.localInfoCards = this.localInfoCards.map((info) => {
+                if (info.idMatching === card1 || info.idMatching === card2) {
                   return { ...info, flipped: false };
                 }
                 return info;
