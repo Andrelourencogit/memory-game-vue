@@ -1,4 +1,6 @@
 <template>
+  <p>tentativas {{ tentativas }}</p>
+  <p>Acertos {{ acertos }}</p>
   <ul>
     <template v-for="info in localInfoCards" :key="info.id">
       <transition name="card-transition" mode="out-in">
@@ -20,37 +22,34 @@
   </ul>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
-
-interface InfoCard {
-  id: number;
-  idMatching: number;
-  img: string;
-  name: string;
-  flipped: boolean;
-}
 
 export default defineComponent({
   props: {
-    infoCards: { type: Array as () => InfoCard[], required: true },
+    infoCards: { type: Array, required: true },
   },
   data() {
     return {
-      flippedCards: [] as number[],
-      localInfoCards: [] as InfoCard[],
+      flippedCards: [],
+      localInfoCards: [],
+      tentativas: 0,
+      acertos: 0,
     };
   },
   mounted() {
     this.localInfoCards = [...this.infoCards];
   },
   methods: {
-    flipCard(card: InfoCard) {
+    flipCard(card) {
       if (this.flippedCards.length < 2) {
         card.flipped = true;
         this.flippedCards.push(card.idMatching);
 
         if (this.flippedCards.length === 2) {
+          this.tentativas++;
+          this.$store.commit("SET_NUMBERS_ATTEMPTS", this.tentativas);
+
           const [card1, card2] = this.flippedCards;
 
           if (
@@ -58,6 +57,7 @@ export default defineComponent({
             this.localInfoCards[card2 - 1].idMatching
           ) {
             // Lógica para quando os dois cartões são iguais
+            this.acertos++;
             setTimeout(() => {
               this.localInfoCards = this.localInfoCards.map((info) => {
                 if (info.idMatching === card1 || info.idMatching === card2) {
@@ -67,6 +67,7 @@ export default defineComponent({
               });
               this.flippedCards = [];
             }, 1000);
+            this.$store.commit("SET_CORRECT_ANSWERS", this.acertos);
           } else {
             // Lógica para quando os dois cartões são diferentes
             setTimeout(() => {
@@ -81,6 +82,11 @@ export default defineComponent({
           }
         }
       }
+    },
+    flipAllCards() {
+      this.localInfoCards = this.localInfoCards.map((info) => {
+        return { ...info, flipped: true };
+      });
     },
   },
 });

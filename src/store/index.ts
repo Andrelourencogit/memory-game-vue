@@ -5,24 +5,37 @@ export default createStore({
     title: "Jogo Da Memória de times do Brasil",
     selectedOption: "facil",
     namePlayer: "",
+    timeInit: 0,
+    timeFinal: 0,
+    correctAnswers: 0,
+    numbersAttempts: 0,
+    reloadgame: false,
   },
   mutations: {
-    setTitle(state, newTitle) {
-      state.title = newTitle;
+    SET_TITLE(state, payload) {
+      state.title = payload;
+    },
+    SET_CORRECT_ANSWERS(state, payload) {
+      state.correctAnswers = payload;
+    },
+    SET_NUMBERS_ATTEMPTS(state, payload) {
+      state.numbersAttempts = payload;
     },
     SET_SELECTED_OPTION(state, option) {
       state.selectedOption = option;
+      if (option === "facil") {
+        state.timeInit = 150;
+      } else if (option === "medio") {
+        state.timeInit = 120;
+      } else {
+        state.timeInit = 90;
+      }
     },
     SET_NAME_PLAYER(state, name) {
-      console.log("entrou", name);
       state.namePlayer = name;
     },
   },
-  actions: {
-    setNamePlayer({ commit }, name) {
-      commit("SET_NAME_PLAYER", name);
-    },
-  },
+  actions: {},
   modules: {},
   getters: {
     getTitle: (state) => {

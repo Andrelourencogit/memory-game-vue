@@ -14,6 +14,23 @@
         <span class="select-arrow"></span>
       </div>
     </div>
+    <div class="info-container">
+      <div class="info-text">
+        <p>
+          O objetivo do jogo é encontrar os pares de cartas idênticas,
+          representando os escudos dos times de futebol brasileiros. As cartas
+          são dispostas viradas para baixo e o jogador precisa virar duas cartas
+          por vez, tentando encontrar as combinações corretas. Caso as duas
+          cartas viradas sejam iguais você marca pontos. Caso contrário, as
+          cartas são viradas novamente e o jogador deve tentar lembrar a posição
+          delas para as próximas jogadas. Para deixar o jogo mais desafiador,
+          você pode escolher o nível de dificuldade entre Fácil, Médio e
+          Difícil. Cada nível tem um número diferente do cronômetro, no nível
+          Fácil o tempo é de 2:30, no médio 2 e no difícil 1:30, sua pontuação
+          final varia pelo tempo e quantidades de tentativas para solucionar.
+        </p>
+      </div>
+    </div>
     <button
       class="start-button"
       :class="{ disabled: !isButtonEnabled }"
@@ -53,7 +70,7 @@ export default defineComponent({
 
     startGame() {
       this.$store.commit('SET_SELECTED_OPTION', this.selectedOption);
-        this.$store.commit('SET_NAME_PLAYER', this.name);
+      this.$store.commit('SET_NAME_PLAYER', this.name);
       this.$router.push('/game');
     }
   },
@@ -162,5 +179,23 @@ option {
 
 .start-button:active {
   background-color: #0278b7;
+}
+
+.info-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.info-text {
+  margin-right: 10px;
+  /* Estilos do texto informativo */
+}
+
+.info-image {
+  width: 100px;
+  height: 100px;
+  /* Estilos da imagem informativa */
 }
 </style>
