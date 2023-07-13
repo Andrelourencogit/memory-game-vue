@@ -39,7 +39,7 @@
       @click="startGame"
       :disabled="!isButtonEnabled"
     >
-      Iniciar Jogo
+      Iniciar
     </button>
   </div>
 </template>
