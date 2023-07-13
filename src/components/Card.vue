@@ -1,6 +1,6 @@
 <template>
-  <p>tentativas {{ tentativas }}</p>
-  <p>Acertos {{ acertos }}</p>
+  <p>tentativas {{ numbersAttempts }}</p>
+  <p>Acertos {{ correctAnswers }}</p>
   <ul>
     <template v-for="info in localInfoCards" :key="info.id">
       <transition name="card-transition" mode="out-in">
@@ -15,6 +15,7 @@
         <template v-else>
           <li class="card-back" @click="flipCard(info)">
             <img src="../assets/img/cbf.png" class="card-image" />
+            <!-- <h3 class="card-title">{{ info.id }} - {{ info.flipped }}</h3> -->
           </li>
         </template>
       </transition>
@@ -23,6 +24,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -33,62 +36,42 @@ export default defineComponent({
     return {
       flippedCards: [],
       localInfoCards: [],
-      tentativas: 0,
-      acertos: 0,
     };
+  },
+  computed: {
+    ...mapState(["correctAnswers", "numbersAttempts"]),
   },
   mounted() {
     this.localInfoCards = [...this.infoCards];
   },
   methods: {
     flipCard(card) {
-      if (this.flippedCards.length < 2) {
+      if (this.flippedCards.length < 2 && !card.flipped) {
         card.flipped = true;
-        this.flippedCards.push(card.idMatching);
+        this.flippedCards.push(card);
 
         if (this.flippedCards.length === 2) {
-          this.tentativas++;
-          this.$store.commit("SET_NUMBERS_ATTEMPTS", this.tentativas);
+          this.$store.commit("INCREMENT_NUMBERS_ATTEMPTS");
 
           const [card1, card2] = this.flippedCards;
 
-          if (
-            this.localInfoCards[card1 - 1].idMatching ===
-            this.localInfoCards[card2 - 1].idMatching
-          ) {
-            // Lógica para quando os dois cartões são iguais
-            this.acertos++;
+          if (card1.idMatching === card2.idMatching) {
+            this.$store.commit("INCREMENT_CORRECT_ANSWERS");
             setTimeout(() => {
-              this.localInfoCards = this.localInfoCards.map((info) => {
-                if (info.idMatching === card1 || info.idMatching === card2) {
-                  return { ...info, flipped: true };
-                }
-                return info;
-              });
               this.flippedCards = [];
             }, 1000);
-            this.$store.commit("SET_CORRECT_ANSWERS", this.acertos);
           } else {
-            // Lógica para quando os dois cartões são diferentes
             setTimeout(() => {
-              this.localInfoCards = this.localInfoCards.map((info) => {
-                if (info.idMatching === card1 || info.idMatching === card2) {
-                  return { ...info, flipped: false };
-                }
-                return info;
-              });
+              card1.flipped = false;
+              card2.flipped = false;
               this.flippedCards = [];
             }, 1000);
           }
         }
       }
     },
-    flipAllCards() {
-      this.localInfoCards = this.localInfoCards.map((info) => {
-        return { ...info, flipped: true };
-      });
-    },
   },
+  
 });
 </script>
 

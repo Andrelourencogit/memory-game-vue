@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    title: "Jogo Da Memória de times do Brasil",
+    titleGame: "Jogo Da Memória de times do Brasil",
     selectedOption: "facil",
     namePlayer: "",
     timeInit: 0,
@@ -12,9 +12,6 @@ export default createStore({
     reloadgame: false,
   },
   mutations: {
-    SET_TITLE(state, payload) {
-      state.title = payload;
-    },
     SET_CORRECT_ANSWERS(state, payload) {
       state.correctAnswers = payload;
     },
@@ -34,15 +31,14 @@ export default createStore({
     SET_NAME_PLAYER(state, name) {
       state.namePlayer = name;
     },
+    INCREMENT_CORRECT_ANSWERS(state) {
+      state.correctAnswers++;
+    },
+    INCREMENT_NUMBERS_ATTEMPTS(state) {
+      state.numbersAttempts++;
+    },
   },
   actions: {},
   modules: {},
-  getters: {
-    getTitle: (state) => {
-      return state.title;
-    },
-    getSelectedOption: (state) => {
-      return state.selectedOption;
-    },
-  },
+  getters: {},
 });

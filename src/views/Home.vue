@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="title">{{ title }}</h1>
+    <h1 class="title">{{ titleGame }}</h1>
     <div class="container-content">
       <div class="input-container">
         <input type="text" v-model="name" placeholder="Digite seu nome" />
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="js">
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 
 import { defineComponent } from "vue";
 
@@ -58,10 +58,9 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapGetters(['getTitle']),
-    title() {
-      return this.getTitle;
-    },
+    ...mapState([
+      "titleGame",
+    ]),
     isButtonEnabled() {
       return this.selectedOption && this.name.length > 3;
     },

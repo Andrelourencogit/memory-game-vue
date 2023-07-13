@@ -8,12 +8,12 @@
           <span class="pontuacao"> {{ pointsFinal }} </span> !!!
         </p>
         <p class="parabens" v-else>
-          Final de jogo {{ namePlayer }}, sua pontuação é {{ pointsFinal }} !!!
+          Final de jogo, o tempo acabou {{ namePlayer }}, sua pontuação é {{ pointsFinal }} !!!
         </p>
 
-        <!-- <button class="restart-button" @click="restartGame">
+        <button class="restart-button" @click="restartGame">
           Recomeçar Jogo
-        </button> -->
+        </button>
         <button class="restart-button" @click="reloadGame">
           Encerrar Jogo
         </button>
@@ -23,15 +23,15 @@
       <div class="timer-container">
         <div class="timer">{{ formatTime }}</div>
       </div>
-      <Card :infoCards="cards" />
+      <Card :infoCards="shuffledCards" />
     </template>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-
 import { defineComponent } from "vue";
+
 import Card from "@/components/Card.vue";
 
 export default defineComponent({
@@ -127,33 +127,30 @@ export default defineComponent({
       "timeFinal",
     ]),
     formatTime() {
-      let scd = this.timeGame;
-      const minutes = Math.floor(this.timeGame / 60);
-      const seconds = scd % 60;
+      let minutes = Math.floor(this.timeGame / 60);
+      let seconds = this.timeGame % 60;
       return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     },
     pointsFinal() {
       let score =
-        this.correctAnswers +
+        this.correctAnswers * 10 +
         this.correctAnswers * (this.timeGame / this.timeInit) +
-        100 * (10 / this.numbersAttempts);
+        this.correctAnswers * (100 * (10 / this.numbersAttempts));
       return score.toFixed(2);
+    },
+    shuffledCards() {
+      let duplicatedCards = [...this.cards, ...this.cards];
+      duplicatedCards = duplicatedCards.map((card, index) => {
+        if (index > 9) {
+          return { ...card, id: card.id + 10 };
+        }
+        return card;
+      });
+      return this.shuffleArray(duplicatedCards);
     },
   },
   created() {
     this.timeGame = this.timeInit;
-    // Duplica os cards
-    let duplicatedCards = [...this.cards, ...this.cards];
-
-    duplicatedCards = duplicatedCards.map((card, cont) => {
-      if (cont > 9) {
-        return { ...card, id: card.id + 10 };
-      }
-      return card;
-    });
-
-    // Embaralha os cards aleatoriamente
-    this.cards = this.shuffleArray(duplicatedCards);
   },
   mounted() {
     this.startTimer();
@@ -168,13 +165,11 @@ export default defineComponent({
       return array;
     },
     startTimer() {
-      let countdown = this.timeGame; // Tempo total da contagem regressiva
       const timer = setInterval(() => {
-        countdown--; // Decrementa o valor da contagem regressiva
-        if (countdown >= 0 && this.correctAnswers < 9) {
-          this.timeGame = countdown; // Atualiza o valor do tempo do cronômetro
+        if (this.timeGame > 0 && this.correctAnswers < 10) {
+          this.timeGame--;
         } else {
-          clearInterval(timer); // Para o cronômetro quando a contagem regressiva chegar a zero
+          clearInterval(timer);
         }
       }, 1000);
     },
@@ -186,6 +181,11 @@ export default defineComponent({
     restartGame() {
       this.$store.commit("SET_NUMBERS_ATTEMPTS", 0);
       this.$store.commit("SET_CORRECT_ANSWERS", 0);
+      this.timeGame = this.timeInit;
+      this.startTimer();
+      this.shuffledCards.forEach((card) => {
+        card.flipped = false;
+      });
     },
     reloadGame() {
       this.$router.push("/");
