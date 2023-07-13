@@ -1,6 +1,6 @@
 <template>
-  <p>tentativas {{ numbersAttempts }}</p>
-  <p>Acertos {{ correctAnswers }}</p>
+  <p class="feedback-game">Tentativas: {{ numbersAttempts }}</p>
+  <p class="feedback-game">Acertos: {{ correctAnswers }}</p>
   <ul>
     <template v-for="info in localInfoCards" :key="info.id">
       <transition name="card-transition" mode="out-in">
@@ -15,7 +15,6 @@
         <template v-else>
           <li class="card-back" @click="flipCard(info)">
             <img src="../assets/img/cbf.png" class="card-image" />
-            <!-- <h3 class="card-title">{{ info.id }} - {{ info.flipped }}</h3> -->
           </li>
         </template>
       </transition>
@@ -71,7 +70,6 @@ export default defineComponent({
       }
     },
   },
-  
 });
 </script>
 
@@ -79,6 +77,12 @@ export default defineComponent({
 ul {
   display: flex;
   flex-wrap: wrap;
+}
+
+.feedback-game {
+  font-size: 25px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
 .card {

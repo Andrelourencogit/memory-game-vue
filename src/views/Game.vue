@@ -8,15 +8,13 @@
           <span class="pontuacao"> {{ pointsFinal }} </span> !!!
         </p>
         <p class="parabens" v-else>
-          Final de jogo, o tempo acabou {{ namePlayer }}, sua pontuação é {{ pointsFinal }} !!!
+          Final de jogo, o tempo acabou
+          <span class="nome"> {{ namePlayer }} </span>, sua pontuação é
+          <span class="pontuacao"> {{ pointsFinal }} </span> !!!
         </p>
 
-        <button class="restart-button" @click="restartGame">
-          Recomeçar Jogo
-        </button>
-        <button class="restart-button" @click="reloadGame">
-          Encerrar Jogo
-        </button>
+        <button class="game-button" @click="restartGame">Recomeçar Jogo</button>
+        <button class="game-button end-button" @click="endGame">Encerrar Jogo</button>
       </div>
     </template>
     <template v-else>
@@ -187,7 +185,7 @@ export default defineComponent({
         card.flipped = false;
       });
     },
-    reloadGame() {
+    endGame() {
       this.$router.push("/");
       this.$store.commit("SET_NUMBERS_ATTEMPTS", 0);
       this.$store.commit("SET_CORRECT_ANSWERS", 0);
@@ -197,6 +195,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.game {
+  height: 100vh;
+}
 .timer-container {
   display: flex;
   justify-content: center;
@@ -228,10 +229,9 @@ export default defineComponent({
   color: #000000;
 }
 
-.restart-button {
+.game-button {
   margin-top: 100px;
   padding: 10px 20px;
-  background: linear-gradient(to right, #00ff00, #0000ff, #ffff00);
   color: #fff;
   font-size: 30px;
   border: none;
@@ -239,5 +239,11 @@ export default defineComponent({
   cursor: pointer;
   font-weight: bold;
   width: max-content;
+  margin-right: 20px;
+  background: #372;
+}
+
+.end-button {
+  background: #8b0000;
 }
 </style>

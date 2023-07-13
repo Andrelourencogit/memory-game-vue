@@ -1,19 +1,6 @@
 <template>
   <div class="home">
     <h1 class="title">{{ titleGame }}</h1>
-    <div class="container-content">
-      <div class="input-container">
-        <input type="text" v-model="name" placeholder="Digite seu nome" />
-      </div>
-      <div class="select-container">
-        <select class="custom-select" v-model="selectedOption">
-          <option value="facil">Fácil</option>
-          <option value="medio">Médio</option>
-          <option value="dificil">Difícil</option>
-        </select>
-        <span class="select-arrow"></span>
-      </div>
-    </div>
     <div class="info-container">
       <div class="info-text">
         <p>
@@ -29,6 +16,21 @@
           Fácil o tempo é de 2:30, no médio 2 e no difícil 1:30, sua pontuação
           final varia pelo tempo e quantidades de tentativas para solucionar.
         </p>
+        <p>Abaixo os times que estão no jogo:</p>
+      </div>
+      <img src="../assets/img/allTimes.png" alt="">
+    </div>
+    <div class="container-content">
+      <div class="input-container">
+        <input type="text" v-model="name" placeholder="Digite seu nome" />
+      </div>
+      <div class="select-container">
+        <select class="custom-select" v-model="selectedOption">
+          <option value="facil">Fácil</option>
+          <option value="medio">Médio</option>
+          <option value="dificil">Difícil</option>
+        </select>
+        <span class="select-arrow"></span>
       </div>
     </div>
     <button
@@ -79,7 +81,6 @@ export default defineComponent({
 <style scoped>
 .home {
   text-align: center;
-  height: 100vh;
   background: white;
   display: flex;
   flex-direction: column;
@@ -182,19 +183,31 @@ option {
 
 .info-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  max-width: 700px;
+  border: 5px dashed transparent; /* Adicione uma borda transparente para definir o espaço para o degradê */
+  background-image: linear-gradient(to right, #00ff00, #0000ff, #ffff00); /* Substitua as cores pelo seu degradê desejado */
+  background-origin: border-box;
+  background-clip: border-box;
+  padding: 5px;
+  margin-top: 20px;
+}
+
+.info-container img {
+  padding: 20px;
+  background: white;
 }
 
 .info-text {
-  margin-right: 10px;
-  /* Estilos do texto informativo */
+  max-width: 700px;
+  background: #fff;
 }
 
-.info-image {
-  width: 100px;
-  height: 100px;
-  /* Estilos da imagem informativa */
+.info-text p {
+  text-align: justify;
+  font-weight: bold;
+  line-height: 25px;
+  padding: 20px;
+  margin: 0;
 }
 </style>
