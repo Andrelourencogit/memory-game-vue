@@ -13,8 +13,8 @@
           <span class="pontuacao"> {{ pointsFinal }} </span> !!!
         </p>
 
-        <button class="game-button" @click="restartGame">Recomeçar Jogo</button>
-        <button class="game-button end-button" @click="endGame">Encerrar Jogo</button>
+        <button class="game-button" @click="restartGame">Recomeçar</button>
+        <button class="game-button end-button" @click="endGame">Encerrar</button>
       </div>
     </template>
     <template v-else>
